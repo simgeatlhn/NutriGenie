@@ -15,6 +15,24 @@ struct ContentView: View {
                     Image(systemName: "house")
                     Text("Home")
                 }
+            
+            HomeView()
+                .tabItem {
+                    Image(systemName: "clock")
+                    Text("Timer")
+                }
+            
+            HomeView()
+                .tabItem {
+                    Image(systemName: "bookmark")
+                    Text("Saved")
+                }
+            
+            HomeView()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Profile")
+                }
         }
         .accentColor(.black)
     }

@@ -53,7 +53,7 @@ struct HomeView: View {
                             .font(Font.body.bold())
                     }
                     if index != tabs.count - 1 {
-                       
+                        
                     }
                 }
             }
@@ -92,9 +92,7 @@ struct HomeView: View {
                 .padding(.leading, 16)
             }
             
-            Button(action: {
-                print("camera")
-            }) {
+            NavigationLink(destination: CameraView()) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.black)

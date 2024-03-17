@@ -28,12 +28,34 @@ struct CardView: View {
                                             .offset(x: excessMinX(geometryProxy, offset: 1))
                                     }
                                     .zIndex(items.zIndex(item))
+                                    .overlay(
+                                        VStack (alignment: .trailing) {
+                                            Button(action: {
+                                                print("bookmark")
+                                            }) {
+                                                Image(systemName: "bookmark")
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20)
+                                                    .foregroundColor(.white)
+                                                    .padding()
+                                                    .background(.white.opacity(0.6))
+                                                    .clipShape(Circle())
+                                            }
+                                            .padding(.top, 16)
+                                            Spacer()
+                                            Text("Bread & Egg Morning Casserole")
+                                                .foregroundColor(.white)
+                                                .bold()
+                                                .padding(.vertical)
+                                        }
+                                    )
                             }
                         }
                     }
                     .scrollIndicators(showsIndicator ? .visible: .hidden)
                 }
-                .frame(width: 480, height: 480)
+                .frame(width: 480, height: 450)
+                
             }
         }
     }

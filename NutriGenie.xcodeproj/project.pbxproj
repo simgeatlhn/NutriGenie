@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6007548A2B9B308B00C1BA3F /* SweetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600754892B9B308B00C1BA3F /* SweetView.swift */; };
+		6014C38B2BA744D600C30E08 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6014C38A2BA744D600C30E08 /* RecipeDetailView.swift */; };
 		602F5D232B99FB7D00D8B593 /* NutriGenieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602F5D222B99FB7D00D8B593 /* NutriGenieApp.swift */; };
 		602F5D272B99FB7D00D8B593 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 602F5D262B99FB7D00D8B593 /* Assets.xcassets */; };
 		602F5D2B2B99FB7D00D8B593 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 602F5D2A2B99FB7D00D8B593 /* Preview Assets.xcassets */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		600754892B9B308B00C1BA3F /* SweetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweetView.swift; sourceTree = "<group>"; };
+		6014C38A2BA744D600C30E08 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		602F5D1F2B99FB7D00D8B593 /* NutriGenie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriGenie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		602F5D222B99FB7D00D8B593 /* NutriGenieApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutriGenieApp.swift; sourceTree = "<group>"; };
 		602F5D262B99FB7D00D8B593 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				60EC9D232BA0709E00BACB04 /* RecipesView.swift */,
 				60EC9D252BA07EDE00BACB04 /* RecipeView.swift */,
 				60EC9D272BA080F500BACB04 /* RecipeModel.swift */,
+				6014C38A2BA744D600C30E08 /* RecipeDetailView.swift */,
 			);
 			path = Recipes;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				60EC9D262BA07EDE00BACB04 /* RecipeView.swift in Sources */,
 				60696CCA2B9C925B00F17D82 /* CameraView.swift in Sources */,
 				60EC9D282BA080F500BACB04 /* RecipeModel.swift in Sources */,
+				6014C38B2BA744D600C30E08 /* RecipeDetailView.swift in Sources */,
 				60EC9D242BA0709E00BACB04 /* RecipesView.swift in Sources */,
 				60BE9D432B9A0250008F625F /* ContentView.swift in Sources */,
 				60CA44CE2BA61069009FE014 /* CardModel.swift in Sources */,

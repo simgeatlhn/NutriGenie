@@ -9,18 +9,17 @@ import SwiftUI
 
 struct CardView: View {
     @State private var showsIndicator: Bool = false
+    
     var body: some View {
         NavigationStack {
-            VStack {
-                GeometryReader {
-                    let size = $0.size
-                    
+            GeometryReader { geometry in
+                VStack {
                     ScrollView(.horizontal) {
                         HStack(spacing: 0) {
                             ForEach(items) { item in
                                 CardView(item)
-                                    .padding(.horizontal, 75)
-                                    .frame(width: size.width)
+                                    .frame(width: geometry.size.width - 16, height: geometry.size.height - 16 )
+                                    .padding()
                                     .visualEffect { content, geometryProxy in
                                         content
                                             .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
@@ -35,11 +34,12 @@ struct CardView: View {
                                             }) {
                                                 Image(systemName: "bookmark")
                                                     .resizable()
-                                                    .frame(width: 20, height: 20)
+                                                    .frame(width: 16, height: 16)
                                                     .foregroundColor(.white)
                                                     .padding()
                                                     .background(.white.opacity(0.6))
                                                     .clipShape(Circle())
+                                                    .padding(.vertical)
                                             }
                                             .padding(.top, 16)
                                             Spacer()
@@ -47,15 +47,15 @@ struct CardView: View {
                                                 .foregroundColor(.white)
                                                 .bold()
                                                 .padding(.vertical)
+                                                .padding(.bottom, 8)
                                         }
                                     )
                             }
                         }
                     }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
                     .scrollIndicators(showsIndicator ? .visible: .hidden)
                 }
-                .frame(width: 480, height: 450)
-                
             }
         }
     }

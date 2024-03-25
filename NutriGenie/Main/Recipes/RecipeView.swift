@@ -22,7 +22,7 @@ struct RecipeView: View {
             Spacer()
             Image("images")
                 .resizable()
-                .frame(width: 100, height: 120)
+                .frame(width: 120, height: 100)
                 .cornerRadius(15)
         }
         .padding()

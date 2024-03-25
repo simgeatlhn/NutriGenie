@@ -11,22 +11,29 @@ struct RecipeDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isRecipeViewPresented = false
     
+    func adaptiveSize(size: CGFloat) -> CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        let baseWidth: CGFloat = 375 // Base width for iPhone 11
+        let scaleFactor = screenWidth / baseWidth
+        return size * scaleFactor
+    }
+    
     var body: some View {
         ZStack(alignment: .top) {
             Image("images")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(height: 400)
+                .frame(height: adaptiveSize(size: 400))
                 .clipped()
                 .edgesIgnoringSafeArea(.top)
             
             GeometryReader { geometry in
                 RoundedRectangle(cornerRadius: 40)
-                    .fill(.white)
+                    .fill(Color.white)
                     .shadow(radius: 24)
-                    .frame(width: geometry.size.width - 200)
+                    .frame(width: geometry.size.width - adaptiveSize(size: 200))
                     .cornerRadius(30)
-                    .offset(x:100, y: 240)
+                    .offset(x: adaptiveSize(size: 100), y: adaptiveSize(size: 240))
             }
             .overlay (
                 VStack(alignment: .leading) {
@@ -37,16 +44,16 @@ struct RecipeDetailView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal)
                         .padding(.vertical)
-                        .padding(.top, 100)
+                        .padding(.top, adaptiveSize(size: 100))
                     
-                    HStack(spacing: 72) {
+                    HStack(spacing: adaptiveSize(size: 72)) {
                         VStack {
                             Image(systemName: "timer")
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: adaptiveSize(size: 24), height: adaptiveSize(size: 24))
                                 .foregroundColor(.black)
                                 .padding()
-                                .background(.gray.opacity(0.1))
+                                .background(Color.gray.opacity(0.1))
                                 .cornerRadius(6)
                             Text("65 min")
                                 .foregroundColor(.black)
@@ -54,10 +61,10 @@ struct RecipeDetailView: View {
                         VStack {
                             Image(systemName: "fork.knife.circle")
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: adaptiveSize(size: 24), height: adaptiveSize(size: 24))
                                 .foregroundColor(.black)
                                 .padding()
-                                .background(.gray.opacity(0.1))
+                                .background(Color.gray.opacity(0.1))
                                 .cornerRadius(6)
                             Text("serves 4")
                                 .foregroundColor(.black)
@@ -66,10 +73,10 @@ struct RecipeDetailView: View {
                         VStack {
                             Image(systemName: "figure.cooldown")
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: adaptiveSize(size: 24), height: adaptiveSize(size: 24))
                                 .foregroundColor(.black)
                                 .padding()
-                                .background(.gray.opacity(0.1))
+                                .background(Color.gray.opacity(0.1))
                                 .cornerRadius(6)
                             Text("540 kcal")
                                 .foregroundColor(.black)
@@ -77,7 +84,7 @@ struct RecipeDetailView: View {
                     }
                     .padding(.horizontal)
                     
-                    Text("Recipe Details: Egg,garlic,clove, medium")
+                    Text("Recipe Details: Egg, garlic, clove, medium ")
                         .foregroundColor(.black)
                         .padding()
                     
@@ -89,13 +96,13 @@ struct RecipeDetailView: View {
                         HStack {
                             Image(systemName: "play.fill")
                                 .foregroundColor(.white)
-                                .padding(.trailing, 4)
+                                .padding(.trailing, adaptiveSize(size: 4))
                             Text("Watch the video")
                                 .foregroundColor(.white)
                         }
                         .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.black)
+                        .frame(width: adaptiveSize(size: 300), height: adaptiveSize(size: 50))
+                        .background(Color.black)
                         .cornerRadius(8)
                     }
                     .padding()
@@ -110,12 +117,12 @@ struct RecipeDetailView: View {
                 }) {
                     Image(systemName: "arrow.left")
                         .resizable()
-                        .frame(width: 20, height: 20)
+                        .frame(width: adaptiveSize(size: 16), height: adaptiveSize(size: 16))
                         .foregroundColor(.black)
                         .padding()
-                        .background(.white.opacity(0.6))
+                        .background(Color.white.opacity(0.6))
                         .clipShape(Circle())
-                        .padding(.top, 32)
+                        .padding(.top, adaptiveSize(size: 32))
                 },
             trailing:
                 HStack {
@@ -124,17 +131,18 @@ struct RecipeDetailView: View {
                     }) {
                         Image(systemName: "bookmark")
                             .resizable()
-                            .frame(width: 20, height: 20)
+                            .frame(width: adaptiveSize(size: 16), height: adaptiveSize(size: 16))
                             .foregroundColor(.black)
                             .padding()
-                            .background(.white.opacity(0.6))
+                            .background(Color.white.opacity(0.6))
                             .clipShape(Circle())
                     }
-                    .padding(.top, 32)
+                    .padding(.top, adaptiveSize(size: 32))
                 }
         )
     }
 }
+
 
 
 

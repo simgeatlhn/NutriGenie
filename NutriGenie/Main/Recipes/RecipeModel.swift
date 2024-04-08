@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Recipe {
-    var title: String
-    var description: String
-    var imageName: String
+struct Recipe: Identifiable {
+    let id = UUID()
+    let title: String
+    let description: String
+    let imageName: String
 }

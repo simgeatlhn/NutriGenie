@@ -71,70 +71,66 @@ class CameraViewControllerWrapper: UIViewController, AVCapturePhotoCaptureDelega
 
 struct CameraView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var isRecipeViewPresented = false
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            CameraViewController()
-                .edgesIgnoringSafeArea(.all)
-            VStack {
-                Spacer()
-                Button(action: {
-                    isRecipeViewPresented.toggle()
-                }) {
-                    Image(systemName: "wand.and.stars.inverse")
-                        .resizable()
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(.white.opacity(0.6))
-                        .clipShape(Circle())
+        NavigationView {
+            ZStack(alignment: .bottom) {
+                CameraViewController()
+                    .edgesIgnoringSafeArea(.all)
+                VStack {
+                    Spacer()
+                    NavigationLink(destination: RecipesView()) {
+                        Image(systemName: "wand.and.stars.inverse")
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.black)
+                            .padding()
+                            .background(.white.opacity(0.6))
+                            .clipShape(Circle())
+                    }
+                    .padding(.bottom, 24)
                 }
-                .padding(.bottom, 24)
             }
+            .navigationBarItems(
+                leading:
+                    HStack {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.black)
+                                .padding()
+                                .background(.white.opacity(0.6))
+                                .clipShape(Circle())
+                        }
+                        .padding(.top, 24)
+                        Spacer()
+                    },
+                trailing:
+                    HStack {
+                        Text("Recipe Scanner")
+                            .foregroundColor(.white)
+                            .bold()
+                            .padding(.top, 24)
+                            .padding(.trailing, 50)
+                        Button(action: {
+                            print("bolt slash")
+                        }) {
+                            Image(systemName: "bolt.slash")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.black)
+                                .padding()
+                                .background(.white.opacity(0.6))
+                                .clipShape(Circle())
+                        }
+                        .padding(.top, 24)
+                    }
+            )
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading:
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(.white.opacity(0.6))
-                            .clipShape(Circle())
-                    }
-                    .padding(.top, 24)
-                    Spacer()
-                },
-            trailing:
-                HStack {
-                    Text("Recipe Scanner")
-                        .foregroundColor(.white)
-                        .bold()
-                        .padding(.top, 24)
-                        .padding(.trailing, 50)
-                    Button(action: {
-                        print("bolt slash")
-                    }) {
-                        Image(systemName: "bolt.slash")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(.white.opacity(0.6))
-                            .clipShape(Circle())
-                    }
-                    .padding(.top, 24)
-                }
-        )
-        .sheet(isPresented: $isRecipeViewPresented) {
-            RecipesView()
-        }
     }
 }
 

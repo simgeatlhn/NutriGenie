@@ -79,7 +79,7 @@ struct CameraView: View {
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Spacer()
-                    NavigationLink(destination: RecipesView()) {
+                    NavigationLink(destination: RecipesView(viewModel: RecipeViewModel())) {
                         Image(systemName: "wand.and.stars.inverse")
                             .resizable()
                             .frame(width: 32, height: 32)

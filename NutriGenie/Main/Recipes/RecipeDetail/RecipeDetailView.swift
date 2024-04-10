@@ -4,6 +4,8 @@
 //
 //  Created by simge on 17.03.2024.
 //
+
+
 import SwiftUI
 
 struct RecipeDetailView: View {
@@ -18,7 +20,7 @@ struct RecipeDetailView: View {
                     .frame(height: 400)
                     .clipped()
                 
-                Text("Bread & Egg Morning Casserole")
+                Text(recipe.name)
                     .font(.title2)
                     .padding()
                 
@@ -44,7 +46,7 @@ struct RecipeDetailView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(6)
-                        Text("65 min")
+                        Text("\(recipe.cookingTime) min")
                             .foregroundColor(.black)
                             .font(.footnote)
                     }
@@ -57,10 +59,11 @@ struct RecipeDetailView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(6)
-                        Text("serves 4")
+                        Text("Serves 4")
                             .foregroundColor(.black)
                             .font(.footnote)
                     }
+                    
                     VStack{
                         Image(systemName: "figure.cooldown")
                             .resizable()
@@ -76,7 +79,7 @@ struct RecipeDetailView: View {
                 }
                 .padding(.horizontal)
                 
-                Text("Egg,garlic,clove,medium onion Egg,garlic,clove,medium onion Egg,garlic,clove,medium onion...")
+                Text(recipe.ingredients.joined(separator: ", "))
                     .font(.footnote)
                     .padding()
                 
@@ -102,12 +105,3 @@ struct RecipeDetailView: View {
         .padding(.horizontal)
     }
 }
-
-
-
-struct RecipeDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeDetailView(recipe: Recipe(title: "Sample Recipe", description: "Sample Description", imageName: "images"))
-    }
-}
-

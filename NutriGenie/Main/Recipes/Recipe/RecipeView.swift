@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct RecipeView: View {
+    var recipe: Recipe
+    
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("Bread & Egg Morning Casserole")
+                Text(recipe.name)
                     .font(.title3)
                     .foregroundColor(.black)
-                Text("Egg,garlic,clove,medium onion...")
+                Text(recipe.ingredients.joined(separator: ", "))
                     .font(.body)
                     .foregroundColor(.black)
                     .padding(.top, 5)
@@ -26,14 +28,10 @@ struct RecipeView: View {
                 .cornerRadius(15)
         }
         .padding()
-        .background(.white)
+        .background(Color.white)
         .cornerRadius(15)
         .shadow(radius: 5)
         .padding([.leading, .trailing], 14)
         .padding(.bottom, 10)
     }
-}
-
-#Preview {
-    RecipeView()
 }

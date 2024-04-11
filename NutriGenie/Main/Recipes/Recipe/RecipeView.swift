@@ -22,10 +22,20 @@ struct RecipeView: View {
                     .padding(.top, 5)
             }
             Spacer()
-            Image("images")
-                .resizable()
+            if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
+                }
                 .frame(width: 120, height: 100)
                 .cornerRadius(15)
+            } else {
+                Image("placeholder")
+                    .resizable()
+                    .frame(width: 120, height: 100)
+                    .cornerRadius(15)
+            }
         }
         .padding()
         .background(Color.white)

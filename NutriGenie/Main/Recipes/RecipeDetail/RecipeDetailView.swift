@@ -14,11 +14,30 @@ struct RecipeDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Image("images")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 400)
+                if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {
+                    AsyncImage(url: url) { phase in
+                        if let image = phase.image {
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } else if phase.error != nil {
+                            Image("placeholder") 
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 480)
+                        } else {
+                            ProgressView()
+                                .frame(height: 480)
+                        }
+                    }
+                    .frame(height: 480)
                     .clipped()
+                } else {
+                    Image("placeholder")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 480)
+                        .clipped()
+                }
                 
                 Text(recipe.name)
                     .font(.title2)

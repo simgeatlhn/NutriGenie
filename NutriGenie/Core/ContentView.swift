@@ -16,7 +16,7 @@ struct ContentView: View {
                     Text("Home")
                 }
             
-            HomeView()
+            TimerView()
                 .tabItem {
                     Image(systemName: "clock")
                     Text("Timer")

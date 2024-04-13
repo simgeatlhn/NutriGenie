@@ -17,6 +17,7 @@
 		60A3CA152BC6BF4300163520 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A3CA142BC6BF4300163520 /* RecipeViewModel.swift */; };
 		60BE9D432B9A0250008F625F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE9D422B9A0250008F625F /* ContentView.swift */; };
 		60CA44CC2BA5FB2F009FE014 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CA44CB2BA5FB2F009FE014 /* CardView.swift */; };
+		60E6CA952BCABA1600B4939A /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E6CA942BCABA1600B4939A /* TimerView.swift */; };
 		60EC9D242BA0709E00BACB04 /* RecipesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC9D232BA0709E00BACB04 /* RecipesView.swift */; };
 		60EC9D262BA07EDE00BACB04 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC9D252BA07EDE00BACB04 /* RecipeView.swift */; };
 		60EC9D282BA080F500BACB04 /* RecipeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC9D272BA080F500BACB04 /* RecipeModel.swift */; };
@@ -36,6 +37,7 @@
 		60A3CA142BC6BF4300163520 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		60BE9D422B9A0250008F625F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		60CA44CB2BA5FB2F009FE014 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		60E6CA942BCABA1600B4939A /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		60EC9D232BA0709E00BACB04 /* RecipesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesView.swift; sourceTree = "<group>"; };
 		60EC9D252BA07EDE00BACB04 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		60EC9D272BA080F500BACB04 /* RecipeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeModel.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		602F5D332B99FF4E00D8B593 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				60E6CA932BCABA0900B4939A /* Timer */,
 				60CA44CA2BA5FB26009FE014 /* Card */,
 				60EC9D222BA0709300BACB04 /* Recipes */,
 				60696CC82B9C924900F17D82 /* Camera */,
@@ -166,6 +169,14 @@
 				60CA44CB2BA5FB2F009FE014 /* CardView.swift */,
 			);
 			path = Card;
+			sourceTree = "<group>";
+		};
+		60E6CA932BCABA0900B4939A /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				60E6CA942BCABA1600B4939A /* TimerView.swift */,
+			);
+			path = Timer;
 			sourceTree = "<group>";
 		};
 		60EC9D222BA0709300BACB04 /* Recipes */ = {
@@ -254,6 +265,7 @@
 				602F5D382B9A001300D8B593 /* HomeView.swift in Sources */,
 				60A3CA152BC6BF4300163520 /* RecipeViewModel.swift in Sources */,
 				60EC9D262BA07EDE00BACB04 /* RecipeView.swift in Sources */,
+				60E6CA952BCABA1600B4939A /* TimerView.swift in Sources */,
 				60696CCA2B9C925B00F17D82 /* CameraView.swift in Sources */,
 				60EC9D282BA080F500BACB04 /* RecipeModel.swift in Sources */,
 				6014C38B2BA744D600C30E08 /* RecipeDetailView.swift in Sources */,

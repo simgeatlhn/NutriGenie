@@ -8,88 +8,81 @@
 import SwiftUI
 
 struct CardView: View {
-    @State private var showsIndicator: Bool = false
+    @StateObject var viewModel = RecipeViewModel()
     
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: true) {
                         HStack(spacing: 0) {
-                            ForEach(items) { item in
-                                CardView(item)
-                                    .frame(width: geometry.size.width - 16, height: geometry.size.height - 16 )
-                                    .padding()
-                                    .visualEffect { content, geometryProxy in
-                                        content
-                                            .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
-                                            .offset(x: minX(geometryProxy))
-                                            .offset(x: excessMinX(geometryProxy, offset: 1))
-                                    }
-                                    .zIndex(items.zIndex(item))
-                                    .overlay(
-                                        VStack (alignment: .trailing) {
-                                            Button(action: {
-                                                print("bookmark")
-                                            }) {
-                                                Image(systemName: "bookmark")
-                                                    .resizable()
-                                                    .frame(width: 16, height: 16)
-                                                    .foregroundColor(.white)
-                                                    .padding()
-                                                    .background(.white.opacity(0.6))
-                                                    .clipShape(Circle())
-                                                    .padding(.vertical)
-                                            }
-                                            .padding(.top, 16)
-                                            Spacer()
-                                            Text("Bread & Egg Morning Casserole")
-                                                .foregroundColor(.white)
-                                                .bold()
-                                                .padding(.vertical)
-                                                .padding(.bottom, 8)
-                                        }
-                                    )
+                            ForEach(viewModel.recipes) { recipe in
+                                card(for: recipe, with: geometry)
                             }
                         }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .scrollIndicators(showsIndicator ? .visible: .hidden)
+                    .onAppear {
+                        viewModel.fetchRecipes()
+                    }
                 }
             }
         }
     }
     
-    //Card View
     @ViewBuilder
-    func CardView(_ item: Item) -> some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(item.color.gradient)
+    func card(for recipe: Recipe, with geometry: GeometryProxy) -> some View {
+        ZStack {
+            if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image.resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+                            .cornerRadius(15)
+                    case .failure:
+                        Image(systemName: "photo")
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+            } else {
+                Color.gray
+            }
+            overlay(for: recipe)
+        }
+        .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+        .padding()
     }
     
-    //Stacked Cards Animation
-    func minX(_ proxy: GeometryProxy) -> CGFloat {
-        let minX = proxy.frame(in: .global).minX
-        return minX < 0 ? 0 : -minX
+    @ViewBuilder
+    func overlay(for recipe: Recipe) -> some View {
+        VStack {
+            HStack {
+                Spacer()
+                bookmarkButton()
+            }
+            Spacer()
+            Text(recipe.name)
+                .foregroundColor(.white)
+                .bold()
+                .padding()
+        }
+        .padding()
     }
     
-    func progress(_ proxy: GeometryProxy, limit: CGFloat = 3) -> CGFloat {
-        let maxX = proxy.frame(in: .scrollView(axis: .horizontal)).maxX
-        let width = proxy.bounds(of: .scrollView(axis: .horizontal))?.width ?? 0
-        //Converting into progress
-        let progress = (maxX / width) - 1.0
-        let cappedProgress = min(progress, limit)
-        return  cappedProgress
-    }
-    
-    func scale(_ proxy: GeometryProxy, scale: CGFloat = 0.1) -> CGFloat {
-        let progress = progress(proxy)
-        return 1 - (progress * scale)
-    }
-    
-    func excessMinX(_ proxy: GeometryProxy, offset: CGFloat = 10) -> CGFloat {
-        let progress = progress(proxy)
-        return progress * offset
+    func bookmarkButton() -> some View {
+        Button(action: {
+            print("Bookmark tapped")
+        }) {
+            Image(systemName: "bookmark.fill")
+                .foregroundColor(.white)
+                .padding(10)
+                .background(Circle().fill(Color.black.opacity(0.5)))
+        }
     }
 }
 

@@ -9,15 +9,22 @@ import SwiftUI
 
 struct CardView: View {
     @StateObject var viewModel = RecipeViewModel()
+    @State private var flipped = false
     
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
-                    ScrollView(.horizontal, showsIndicators: true) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 0) {
                             ForEach(viewModel.recipes) { recipe in
                                 card(for: recipe, with: geometry)
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.8)) {
+                                            flipped.toggle()
+                                        }
+                                    }
                             }
                         }
                     }
@@ -33,29 +40,73 @@ struct CardView: View {
     @ViewBuilder
     func card(for recipe: Recipe, with geometry: GeometryProxy) -> some View {
         ZStack {
-            if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
-                            .cornerRadius(15)
-                    case .failure:
-                        Image(systemName: "photo")
-                    @unknown default:
-                        EmptyView()
-                    }
+            Group {
+                if flipped {
+                    backView(for: recipe, with: geometry)
+                } else {
+                    frontView(for: recipe, with: geometry)
                 }
-            } else {
-                Color.gray
             }
-            overlay(for: recipe)
         }
         .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
-        .padding()
+        .cornerRadius(15)
+    }
+    
+    @ViewBuilder
+    func frontView(for recipe: Recipe, with geometry: GeometryProxy) -> some View {
+        if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+                case .failure:
+                    Image(systemName: "photo.on.rectangle.angled")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+                @unknown default:
+                    EmptyView()
+                }
+            }
+        } else {
+            Color.white
+        }
+        overlay(for: recipe)
+    }
+    
+    @ViewBuilder
+    func backView(for recipe: Recipe, with geometry: GeometryProxy) -> some View {
+        ZStack {
+            Color.black
+                .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+                .cornerRadius(15)
+            
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(recipe.name)
+                        .font(.title3)
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.top)
+                    Text("Ingredients")
+                        .bold()
+                        .foregroundColor(.orange)
+                    Text(recipe.ingredients.joined(separator: ", "))
+                        .foregroundColor(.white)
+                        .padding(.bottom)
+                    Text("Instructions")
+                        .bold()
+                        .foregroundColor(.orange)
+                    Text(recipe.instructions)
+                        .foregroundColor(.white)
+                }
+                .padding()
+            }
+        }
     }
     
     @ViewBuilder
@@ -89,3 +140,4 @@ struct CardView: View {
 #Preview {
     CardView()
 }
+

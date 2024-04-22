@@ -9,10 +9,12 @@ import SwiftUI
 
 class RecipeViewModel: ObservableObject {
     @Published var recipes = [Recipe]()
+    @Published var filteredRecipes = [Recipe]()
     
     func fetchRecipes() {
         guard let url = URL(string: "http://192.168.0.133:3000/recipes") else { return }
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
                 print("Failed to fetch recipes:", error)
                 return
@@ -21,13 +23,24 @@ class RecipeViewModel: ObservableObject {
                 print("No data received")
                 return
             }
-            if let decodedRecipes = try? JSONDecoder().decode([Recipe].self, from: data) {
-                DispatchQueue.main.async {
-                    self.recipes = decodedRecipes
-                }
-            } else {
+            guard let decodedRecipes = try? JSONDecoder().decode([Recipe].self, from: data) else {
                 print("Failed to decode recipes")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self?.recipes = decodedRecipes
+                self?.applyFilter(category: "All")
             }
         }.resume()
     }
+    
+    func applyFilter(category: String) {
+        if category == "All" {
+            filteredRecipes = recipes
+        } else {
+            filteredRecipes = recipes.filter { $0.category.contains(category) }
+        }
+    }
 }
+

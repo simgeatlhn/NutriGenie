@@ -14,24 +14,22 @@ struct CardView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                VStack {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 0) {
-                            ForEach(viewModel.recipes) { recipe in
-                                card(for: recipe, with: geometry)
-                                    .frame(width: geometry.size.width, height: geometry.size.height)
-                                    .onTapGesture {
-                                        withAnimation(.easeInOut(duration: 0.8)) {
-                                            flipped.toggle()
-                                        }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        ForEach(viewModel.filteredRecipes) { recipe in
+                            card(for: recipe, with: geometry)
+                                .frame(width: geometry.size.width)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.8)) {
+                                        flipped.toggle()
                                     }
-                            }
+                                }
                         }
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .onAppear {
-                        viewModel.fetchRecipes()
-                    }
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .onAppear {
+                    viewModel.fetchRecipes()
                 }
             }
         }

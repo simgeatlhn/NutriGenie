@@ -10,69 +10,62 @@ import SwiftUI
 struct HomeView: View {
     @State private var selection = 0
     var tabs = ["Sweet", "Breakfast", "Lunch", "Dinner"]
+    @StateObject var viewModel = RecipeViewModel()
     
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Find Your Best")
-                            .font(.title)
-                            .foregroundColor(.black)
-                            .padding(.horizontal)
+                VStack(alignment: .leading) {
+                    Text("Find Your Best")
+                        .font(.title)
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+                    
+                    Text("Cooking Recipes")
+                        .font(.title)
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+                    
+                    searchSection(geometry: geometry)
+                    
+                    segmentedControl
+                    
+                    if viewModel.filteredRecipes.isEmpty {
+                        ProgressView()
+                            .onAppear {
+                                viewModel.fetchRecipes()
+                            }
+                    } else {
+                        CardView(viewModel: viewModel)
                         
-                        Text("Cooking Recipes")
-                            .font(.title)
-                            .foregroundColor(.black)
-                            .padding(.horizontal)
-                        
-                        searchSection(geometry: geometry)
-                        
-                        segmentedControl
-                        
-                        selectedView
                     }
-                    .padding(10)
-                    Spacer()
                 }
+                .padding(.top)
             }
+        }
+        .onAppear {
+            viewModel.fetchRecipes()
         }
     }
     
     private var segmentedControl: some View {
-        VStack {
-            HStack(spacing: 0) {
-                ForEach(0..<4) { index in
-                    Button(action: {
-                        self.selection = index
-                    }) {
-                        Text(tabs[index])
-                            .padding(.vertical, 10)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(self.selection == index ? .black : .gray)
-                            .font(Font.body.bold())
-                    }
-                    if index != tabs.count - 1 {
-                        
-                    }
+        HStack {
+            ForEach(0..<tabs.count, id: \.self) { index in
+                Button(action: {
+                    self.selection = index
+                    viewModel.applyFilter(category: tabs[index])
+                }) {
+                    Text(tabs[index])
+                        .padding(.vertical, 10)
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(self.selection == index ? .black : .gray)
+                        .font(Font.body.bold())
                 }
             }
         }
-    }
-    
-    private var selectedView: some View {
-        Group {
-            if selection == 0 {
-                SweetView()
-            } else if selection == 1 {
-                SweetView()
-            } else if selection == 2 {
-                SweetView()
-            } else {
-                SweetView()
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     private func searchSection(geometry: GeometryProxy) -> some View {
@@ -100,18 +93,18 @@ struct HomeView: View {
                     
                     Image(systemName: "camera.viewfinder")
                         .resizable()
+                        .scaledToFit()
                         .frame(width: 24, height: 24)
                         .foregroundColor(.white)
                 }
             }
         }
-        .padding(8)
+        .padding(.horizontal)
     }
 }
-
-
 
 #Preview {
     HomeView()
 }
+
 

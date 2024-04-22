@@ -120,7 +120,9 @@ struct CardView: View {
             Text(recipe.name)
                 .foregroundColor(.white)
                 .bold()
-                .padding()
+                .padding(6)
+                .background(Color.black.opacity(0.5))
+                .cornerRadius(20)
         }
         .padding()
     }

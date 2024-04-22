@@ -11,7 +11,7 @@ class RecipeViewModel: ObservableObject {
     @Published var recipes = [Recipe]()
     
     func fetchRecipes() {
-        guard let url = URL(string: "http://192.168.0.6:3000/recipes") else { return }
+        guard let url = URL(string: "http://192.168.0.133:3000/recipes") else { return }
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 print("Failed to fetch recipes:", error)

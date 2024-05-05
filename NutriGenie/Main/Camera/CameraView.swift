@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AVFoundation
+import UIKit
+import TensorFlowLite
 
 struct CameraViewController: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
@@ -26,31 +28,34 @@ struct CameraViewController: UIViewControllerRepresentable {
     }
 }
 
-class CameraViewControllerWrapper: UIViewController, AVCapturePhotoCaptureDelegate {
+class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var tabBarControllerDelegate: UITabBarControllerDelegate?
     private let captureSession = AVCaptureSession()
-    private let photoOutput = AVCapturePhotoOutput()
-    
+    private let videoOutput = AVCaptureVideoDataOutput()
+    private var classifier: Classifier?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        classifier = Classifier(modelPath: "model_unquant.tflite", labelsPath: "labels.txt")
         guard let backCamera = AVCaptureDevice.default(for: .video) else {
             print("Unable to access back camera!")
             return
         }
         
         do {
-            let input = try AVCaptureDeviceInput(device: backCamera)
-            captureSession.addInput(input)
-            captureSession.addOutput(photoOutput)
+            let input = try AVCaptureDeviceInput(device: backCamera) // Kameradan gelen veriyi işlemek için giriş nesnesi oluştur
+            captureSession.addInput(input) // Oluşturulan girişi oturuma ekle
+            captureSession.addOutput(videoOutput) // Video çıktısını oturuma ekle
+            
+            videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
+            videoOutput.alwaysDiscardsLateVideoFrames = true // Geciken video karelerini daima yok say
+            
+            let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) // Video önizlemesi için bir katman oluştur
+            previewLayer.videoGravity = .resizeAspectFill // Video görüntüsünün boyutlandırmasını ayarla
+            previewLayer.frame = view.bounds // Önizleme katmanının boyutunu ayarla
+            view.layer.addSublayer(previewLayer) // Önizleme katmanını görünümün katmanlarına ekle
         } catch let error {
             print("Error Unable to initialize back camera: \(error.localizedDescription)")
         }
-        
-        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.frame = view.bounds
-        view.layer.addSublayer(previewLayer)
         
         DispatchQueue.global().async {
             self.captureSession.startRunning()
@@ -66,6 +71,19 @@ class CameraViewControllerWrapper: UIViewController, AVCapturePhotoCaptureDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
+    }
+    
+    // Görüntü verisi geldiğinde çağrılacak olan fonksiyon
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
+        
+        if let result = classifier?.classify(pixelBuffer: imageBuffer) {
+            DispatchQueue.main.async {
+                print("Sınıflandırma sonucu: \(result)")
+            }
+        }
     }
 }
 

@@ -1,4 +1,0 @@
-0 carrot
-1 apple
-2 pepper
-3 potato

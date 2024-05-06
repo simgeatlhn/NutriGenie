@@ -8,7 +8,6 @@
 import SwiftUI
 import AVFoundation
 import UIKit
-import TensorFlowLite
 
 struct CameraViewController: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
@@ -28,34 +27,47 @@ struct CameraViewController: UIViewControllerRepresentable {
     }
 }
 
+
 class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var tabBarControllerDelegate: UITabBarControllerDelegate?
     private let captureSession = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
-    private var classifier: Classifier?
+    private let imageClassifier: ImageClassifier
+    
+    init() {
+        self.imageClassifier = ImageClassifier(model: SqueezeNetFP16().model)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        classifier = Classifier(modelPath: "model_unquant.tflite", labelsPath: "labels.txt")
+        
         guard let backCamera = AVCaptureDevice.default(for: .video) else {
             print("Unable to access back camera!")
             return
         }
         
         do {
-            let input = try AVCaptureDeviceInput(device: backCamera) // Kameradan gelen veriyi işlemek için giriş nesnesi oluştur
-            captureSession.addInput(input) // Oluşturulan girişi oturuma ekle
-            captureSession.addOutput(videoOutput) // Video çıktısını oturuma ekle
+            let input = try AVCaptureDeviceInput(device: backCamera)
+            captureSession.addInput(input)
             
             videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
-            videoOutput.alwaysDiscardsLateVideoFrames = true // Geciken video karelerini daima yok say
+            captureSession.addOutput(videoOutput)
             
-            let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) // Video önizlemesi için bir katman oluştur
-            previewLayer.videoGravity = .resizeAspectFill // Video görüntüsünün boyutlandırmasını ayarla
-            previewLayer.frame = view.bounds // Önizleme katmanının boyutunu ayarla
-            view.layer.addSublayer(previewLayer) // Önizleme katmanını görünümün katmanlarına ekle
+            let connection = videoOutput.connection(with: .video)
+            connection?.videoOrientation = .portrait
         } catch let error {
             print("Error Unable to initialize back camera: \(error.localizedDescription)")
         }
+        
+        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.videoGravity = .resizeAspectFill
+        previewLayer.frame = view.bounds
+        view.layer.addSublayer(previewLayer)
         
         DispatchQueue.global().async {
             self.captureSession.startRunning()
@@ -73,19 +85,23 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
         tabBarController?.tabBar.isHidden = false
     }
     
-    // Görüntü verisi geldiğinde çağrılacak olan fonksiyon
+    // Gerçek zamanlı video çerçeveleri işlenir
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            return
-        }
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         
-        if let result = classifier?.classify(pixelBuffer: imageBuffer) {
-            DispatchQueue.main.async {
-                print("Sınıflandırma sonucu: \(result)")
+        // Görüntüyü sınıflandır
+        imageClassifier.classify(pixelBuffer: pixelBuffer) { result in
+            if let result = result {
+                print("Classified object: \(result)")
+                // Sınıflandırma sonucunu kullanabilirsiniz.
+            } else {
+                print("Unable to classify the image.")
             }
         }
     }
 }
+
+
 
 struct CameraView: View {
     @Environment(\.presentationMode) var presentationMode

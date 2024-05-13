@@ -33,9 +33,11 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
     private let captureSession = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let imageClassifier: ImageClassifier
+    private let recipeViewModel = RecipeViewModel()
+    
     
     init() {
-        self.imageClassifier = ImageClassifier(model: SqueezeNetFP16().model)
+        self.imageClassifier = ImageClassifier(model: RecipeClassifier().model)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,6 +47,8 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        recipeViewModel.fetchRecipes()
         
         guard let backCamera = AVCaptureDevice.default(for: .video) else {
             print("Unable to access back camera!")
@@ -93,7 +97,15 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
         imageClassifier.classify(pixelBuffer: pixelBuffer) { result in
             if let result = result {
                 print("Classified object: \(result)")
-                // Sınıflandırma sonucunu kullanabilirsiniz.
+                
+                // Ürünü içeren tarifleri filtrele
+                self.recipeViewModel.updateFilteredRecipes(with: result)
+                
+                if let recipe = self.recipeViewModel.filteredRecipes.first {
+                    print("Matching recipe found: \(recipe.name)")
+                } else {
+                    print("No matching recipe found for \(result)")
+                }
             } else {
                 print("Unable to classify the image.")
             }

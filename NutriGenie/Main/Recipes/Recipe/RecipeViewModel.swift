@@ -12,7 +12,7 @@ class RecipeViewModel: ObservableObject {
     @Published var filteredRecipes = [Recipe]()
     
     func fetchRecipes() {
-        guard let url = URL(string: "http://192.168.0.133:3000/recipes") else { return }
+        guard let url = URL(string: "http://10.33.10.174:3000/recipes") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
@@ -40,6 +40,14 @@ class RecipeViewModel: ObservableObject {
             filteredRecipes = recipes
         } else {
             filteredRecipes = recipes.filter { $0.category.contains(category) }
+        }
+    }
+    
+    func updateFilteredRecipes(with product: String) {
+        filteredRecipes = recipes.filter { recipe in
+            return recipe.ingredients.contains { ingredient in
+                ingredient.lowercased().contains(product.lowercased())
+            }
         }
     }
 }

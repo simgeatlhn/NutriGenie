@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct RecipesView: View {
-    @ObservedObject var viewModel: RecipeViewModel
+    var filteredRecipes: [Recipe]
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(alignment: .leading, spacing: 8) {
-                Text("\(viewModel.recipes.count) recipes are Generated ✨")
+                Text("\(filteredRecipes.count) recipes are Generated ✨")
                     .font(.title2)
                     .foregroundColor(.black)
                     .bold()
@@ -21,15 +21,13 @@ struct RecipesView: View {
                     .padding(.top, 18)
                     .padding([.leading, .trailing], 18)
                 
-                ForEach(viewModel.recipes) { recipe in
+                ForEach(filteredRecipes, id: \.id) { recipe in
                     NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
                         RecipeView(recipe: recipe)
                     }
                 }
             }
-            .onAppear {
-                viewModel.fetchRecipes()
-            }
         }
+        .navigationBarTitle("Filtered Recipes")
     }
 }

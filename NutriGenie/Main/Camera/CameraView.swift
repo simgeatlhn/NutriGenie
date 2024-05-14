@@ -10,33 +10,33 @@ import AVFoundation
 import UIKit
 
 struct CameraViewController: UIViewControllerRepresentable {
+    @Binding var filteredRecipes: [Recipe]
+    
     func makeUIViewController(context: Context) -> UIViewController {
-        let controller = CameraViewControllerWrapper()
+        let controller = CameraViewControllerWrapper(filteredRecipes: $filteredRecipes)
         controller.tabBarControllerDelegate = context.coordinator
         return controller
     }
     
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
     
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
     
-    class Coordinator: NSObject, UITabBarControllerDelegate {
-    }
+    class Coordinator: NSObject, UITabBarControllerDelegate {}
 }
-
 
 class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var tabBarControllerDelegate: UITabBarControllerDelegate?
     private let captureSession = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let imageClassifier: ImageClassifier
-    private let recipeViewModel = RecipeViewModel()
+    @Binding var filteredRecipes: [Recipe]
+    private var recipeViewModel = RecipeViewModel()
     
-    
-    init() {
+    init(filteredRecipes: Binding<[Recipe]>) {
+        self._filteredRecipes = filteredRecipes
         self.imageClassifier = ImageClassifier(model: RecipeClassifier().model)
         super.init(nibName: nil, bundle: nil)
     }
@@ -89,17 +89,18 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
         tabBarController?.tabBar.isHidden = false
     }
     
-    // Gerçek zamanlı video çerçeveleri işlenir
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         
-        // Görüntüyü sınıflandır
         imageClassifier.classify(pixelBuffer: pixelBuffer) { result in
             if let result = result {
                 print("Classified object: \(result)")
                 
-                // Ürünü içeren tarifleri filtrele
                 self.recipeViewModel.updateFilteredRecipes(with: result)
+                
+                DispatchQueue.main.async {
+                    self.filteredRecipes = self.recipeViewModel.filteredRecipes
+                }
                 
                 if let recipe = self.recipeViewModel.filteredRecipes.first {
                     print("Matching recipe found: \(recipe.name)")
@@ -114,18 +115,19 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
 }
 
 
-
 struct CameraView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var filteredRecipes: [Recipe] = []
+    @StateObject var recipeViewModel = RecipeViewModel()
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                CameraViewController()
+                CameraViewController(filteredRecipes: $filteredRecipes)
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Spacer()
-                    NavigationLink(destination: RecipesView(viewModel: RecipeViewModel())) {
+                    NavigationLink(destination: RecipesView(filteredRecipes: filteredRecipes)) {
                         Image(systemName: "wand.and.stars.inverse")
                             .resizable()
                             .frame(width: 32, height: 32)

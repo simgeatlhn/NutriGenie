@@ -123,7 +123,6 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
 }
 
 
-
 struct CameraView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var filteredRecipes: [Recipe] = []
@@ -136,22 +135,11 @@ struct CameraView: View {
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Spacer()
-                    NavigationLink(destination: RecipesView(filteredRecipes: filteredRecipes)) {
-                        Image(systemName: "wand.and.stars.inverse")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(.white.opacity(0.6))
-                            .clipShape(Circle())
-                    }
-                    .padding(.bottom, 24)
-                    .simultaneousGesture(TapGesture().onEnded {
-                        // Stop the capture session when navigating to RecipesView
-                        if let controller = UIApplication.shared.windows.first?.rootViewController?.presentedViewController as? CameraViewControllerWrapper {
-                            controller.stopCaptureSession()
+                    if !filteredRecipes.isEmpty {
+                        NavigationLink(destination: RecipesView(filteredRecipes: filteredRecipes), isActive: .constant(true)) {
+                            EmptyView()
                         }
-                    })
+                    }
                 }
             }
             .navigationBarItems(
@@ -196,6 +184,7 @@ struct CameraView: View {
         .navigationBarBackButtonHidden(true)
     }
 }
+
 
 #Preview {
     CameraView()

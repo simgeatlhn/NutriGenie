@@ -16,7 +16,6 @@
 		60696CCA2B9C925B00F17D82 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60696CC92B9C925B00F17D82 /* CameraView.swift */; };
 		6092EC9C2BEA42FB00DBB6B8 /* RecipeClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 6092EC9B2BEA42FB00DBB6B8 /* RecipeClassifier.mlmodel */; };
 		60A3CA152BC6BF4300163520 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A3CA142BC6BF4300163520 /* RecipeViewModel.swift */; };
-		60B5AFAF2BE901010016053B /* SqueezeNetFP16.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 60B5AFAE2BE901010016053B /* SqueezeNetFP16.mlmodel */; };
 		60B5AFB12BE901890016053B /* ImageClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B5AFB02BE901890016053B /* ImageClassifier.swift */; };
 		60BE9D432B9A0250008F625F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BE9D422B9A0250008F625F /* ContentView.swift */; };
 		60CA44CC2BA5FB2F009FE014 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CA44CB2BA5FB2F009FE014 /* CardView.swift */; };
@@ -39,7 +38,6 @@
 		60696CCB2B9C9FC000F17D82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6092EC9B2BEA42FB00DBB6B8 /* RecipeClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = RecipeClassifier.mlmodel; sourceTree = "<group>"; };
 		60A3CA142BC6BF4300163520 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
-		60B5AFAE2BE901010016053B /* SqueezeNetFP16.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SqueezeNetFP16.mlmodel; sourceTree = "<group>"; };
 		60B5AFB02BE901890016053B /* ImageClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageClassifier.swift; sourceTree = "<group>"; };
 		60BE9D422B9A0250008F625F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		60CA44CB2BA5FB2F009FE014 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -109,7 +107,6 @@
 		602F5D322B99FCDA00D8B593 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				60B5AFAE2BE901010016053B /* SqueezeNetFP16.mlmodel */,
 				6092EC9B2BEA42FB00DBB6B8 /* RecipeClassifier.mlmodel */,
 				602F5D262B99FB7D00D8B593 /* Assets.xcassets */,
 			);
@@ -273,7 +270,6 @@
 				6007548A2B9B308B00C1BA3F /* SweetView.swift in Sources */,
 				602F5D382B9A001300D8B593 /* HomeView.swift in Sources */,
 				60A3CA152BC6BF4300163520 /* RecipeViewModel.swift in Sources */,
-				60B5AFAF2BE901010016053B /* SqueezeNetFP16.mlmodel in Sources */,
 				60EC9D262BA07EDE00BACB04 /* RecipeView.swift in Sources */,
 				60E6CA952BCABA1600B4939A /* TimerView.swift in Sources */,
 				60696CCA2B9C925B00F17D82 /* CameraView.swift in Sources */,

@@ -87,6 +87,7 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
+        stopCaptureSession() // Stop the session when the view disappears
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -104,6 +105,7 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
                 
                 if let recipe = self.recipeViewModel.filteredRecipes.first {
                     print("Matching recipe found: \(recipe.name)")
+                    self.stopCaptureSession() // Stop the session when a matching recipe is found
                 } else {
                     print("No matching recipe found for \(result)")
                 }
@@ -112,7 +114,14 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
             }
         }
     }
+    
+    func stopCaptureSession() {
+        if captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+    }
 }
+
 
 
 struct CameraView: View {
@@ -137,6 +146,12 @@ struct CameraView: View {
                             .clipShape(Circle())
                     }
                     .padding(.bottom, 24)
+                    .simultaneousGesture(TapGesture().onEnded {
+                        // Stop the capture session when navigating to RecipesView
+                        if let controller = UIApplication.shared.windows.first?.rootViewController?.presentedViewController as? CameraViewControllerWrapper {
+                            controller.stopCaptureSession()
+                        }
+                    })
                 }
             }
             .navigationBarItems(
@@ -182,7 +197,7 @@ struct CameraView: View {
     }
 }
 
-
 #Preview {
     CameraView()
 }
+

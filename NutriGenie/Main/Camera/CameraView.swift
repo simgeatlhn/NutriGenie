@@ -11,9 +11,10 @@ import UIKit
 
 struct CameraViewController: UIViewControllerRepresentable {
     @Binding var filteredRecipes: [Recipe]
+    @Binding var scanStatus: String
     
     func makeUIViewController(context: Context) -> UIViewController {
-        let controller = CameraViewControllerWrapper(filteredRecipes: $filteredRecipes)
+        let controller = CameraViewControllerWrapper(filteredRecipes: $filteredRecipes, scanStatus: $scanStatus)
         controller.tabBarControllerDelegate = context.coordinator
         return controller
     }
@@ -33,10 +34,12 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
     private let videoOutput = AVCaptureVideoDataOutput()
     private let imageClassifier: ImageClassifier
     @Binding var filteredRecipes: [Recipe]
+    @Binding var scanStatus: String
     private var recipeViewModel = RecipeViewModel()
     
-    init(filteredRecipes: Binding<[Recipe]>) {
+    init(filteredRecipes: Binding<[Recipe]>, scanStatus: Binding<String>) {
         self._filteredRecipes = filteredRecipes
+        self._scanStatus = scanStatus
         self.imageClassifier = ImageClassifier(model: RecipeClassifier().model)
         super.init(nibName: nil, bundle: nil)
     }
@@ -73,8 +76,11 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
         previewLayer.frame = view.bounds
         view.layer.addSublayer(previewLayer)
         
-        DispatchQueue.global().async {
-            self.captureSession.startRunning()
+        startCaptureSession()
+        
+        // Başlangıçta scanning mesajını göster
+        DispatchQueue.main.async {
+            self.scanStatus = "Scanning the ingredient..."
         }
     }
     
@@ -101,19 +107,28 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
                 
                 DispatchQueue.main.async {
                     self.filteredRecipes = self.recipeViewModel.filteredRecipes
-                }
-                
-                if let recipe = self.recipeViewModel.filteredRecipes.first {
-                    print("Matching recipe found: \(recipe.name)")
-                    self.stopCaptureSession() // Stop the session when a matching recipe is found
-                } else {
-                    print("No matching recipe found for \(result)")
+                    if let recipe = self.recipeViewModel.filteredRecipes.first {
+                        print("Matching recipe found: \(recipe.name)")
+                        self.stopCaptureSession() // Stop the session when a matching recipe is found
+                        self.scanStatus = "Ingredient detected!"
+                    } else {
+                        print("No matching recipe found for \(result)")
+                    }
                 }
             } else {
                 print("Unable to classify the image.")
             }
         }
     }
+    
+    func startCaptureSession() {
+        DispatchQueue.global().async {
+            if !self.captureSession.isRunning {
+                self.captureSession.startRunning()
+            }
+        }
+    }
+
     
     func stopCaptureSession() {
         if captureSession.isRunning {
@@ -122,19 +137,30 @@ class CameraViewControllerWrapper: UIViewController, AVCaptureVideoDataOutputSam
     }
 }
 
-
 struct CameraView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var filteredRecipes: [Recipe] = []
+    @State private var scanStatus: String = "Scanning the ingredient..."
     @StateObject var recipeViewModel = RecipeViewModel()
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                CameraViewController(filteredRecipes: $filteredRecipes)
+                CameraViewController(filteredRecipes: $filteredRecipes, scanStatus: $scanStatus)
                     .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        scanStatus = "Scanning the ingredient..."
+                    }
+                
                 VStack {
                     Spacer()
+                    Text(scanStatus)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding(6)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(20)
+                    
                     if !filteredRecipes.isEmpty {
                         NavigationLink(destination: RecipesView(filteredRecipes: filteredRecipes), isActive: .constant(true)) {
                             EmptyView()
@@ -185,8 +211,9 @@ struct CameraView: View {
     }
 }
 
-
 #Preview {
     CameraView()
 }
+
+
 

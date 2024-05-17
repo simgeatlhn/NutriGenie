@@ -13,7 +13,7 @@ class RecipeViewModel: ObservableObject {
     
     func fetchRecipes() {
         
-        guard let url = URL(string: "http://10.33.10.175:3000/recipes") else { return }
+        guard let url = URL(string: "http://10.33.10.174:3000/recipes") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {

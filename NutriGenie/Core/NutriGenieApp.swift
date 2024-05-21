@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct NutriGenieApp: App {
+    @StateObject private var recipeViewModel = RecipeViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView() // or your initial view
+                .environmentObject(recipeViewModel)
         }
     }
 }
+

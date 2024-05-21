@@ -112,7 +112,7 @@ struct CardView: View {
         VStack {
             HStack {
                 Spacer()
-                bookmarkButton()
+                bookmarkButton(for: recipe)
             }
             Spacer()
             Text(recipe.name)
@@ -125,9 +125,10 @@ struct CardView: View {
         .padding()
     }
     
-    func bookmarkButton() -> some View {
+    func bookmarkButton(for recipe: Recipe) -> some View {
         Button(action: {
-            print("Bookmark tapped")
+            viewModel.saveRecipe(recipe)
+            print("Bookmark tapped for recipe: \(recipe.name)")
         }) {
             Image(systemName: "bookmark.fill")
                 .foregroundColor(.white)

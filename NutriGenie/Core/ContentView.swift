@@ -22,7 +22,7 @@ struct ContentView: View {
                     Text("Timer")
                 }
             
-            HomeView()
+            SavedRecipesView()
                 .tabItem {
                     Image(systemName: "bookmark")
                     Text("Saved")

@@ -10,10 +10,14 @@ import SwiftUI
 class RecipeViewModel: ObservableObject {
     @Published var recipes = [Recipe]()
     @Published var filteredRecipes = [Recipe]()
+    @Published var savedRecipes = [Recipe]()
+    
+    init() {
+        loadSavedRecipes()
+    }
     
     func fetchRecipes() {
-        
-        guard let url = URL(string: "http://10.33.10.174:3000/recipes") else { return }
+        guard let url = URL(string: "http://192.168.0.126:3000/recipes") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
@@ -33,7 +37,8 @@ class RecipeViewModel: ObservableObject {
                 self?.recipes = decodedRecipes
                 self?.applyFilter(category: "All")
             }
-        }.resume()
+        }
+        .resume()
     }
     
     func applyFilter(category: String) {
@@ -50,6 +55,15 @@ class RecipeViewModel: ObservableObject {
                 ingredient.lowercased().contains(product.lowercased())
             }
         }
+    }
+    
+    func loadSavedRecipes() {
+        savedRecipes = UserDefaultsManager.shared.getSavedRecipes()
+    }
+    
+    func saveRecipe(_ recipe: Recipe) {
+        UserDefaultsManager.shared.saveRecipe(recipe)
+        loadSavedRecipes()
     }
 }
 

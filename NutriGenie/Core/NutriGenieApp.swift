@@ -10,12 +10,19 @@ import SwiftUI
 @main
 struct NutriGenieApp: App {
     @StateObject private var recipeViewModel = RecipeViewModel()
-
+    @State private var showSplash = true
+    
     var body: some Scene {
         WindowGroup {
-            ContentView() // or your initial view
-                .environmentObject(recipeViewModel)
+            if showSplash {
+                SplashView(showSplash: $showSplash)
+            } else {
+                ContentView()
+                    .environmentObject(recipeViewModel)
+            }
         }
     }
 }
+
+
 

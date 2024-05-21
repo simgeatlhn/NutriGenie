@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SavedRecipesView: View {
     @EnvironmentObject var viewModel: RecipeViewModel
     
@@ -29,11 +28,12 @@ struct SavedRecipesView: View {
                     }
                 }
             }
-           // .navigationBarTitle("Saved Recipes")
+        }
+        .onAppear {
+            viewModel.loadSavedRecipes()
         }
     }
 }
-
 
 
 #Preview {

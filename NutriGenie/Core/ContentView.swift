@@ -28,7 +28,7 @@ struct ContentView: View {
                     Text("Saved")
                 }
             
-            HomeView()
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person")
                     Text("Profile")

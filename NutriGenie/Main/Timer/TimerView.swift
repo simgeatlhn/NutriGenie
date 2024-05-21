@@ -13,6 +13,7 @@ struct TimerView: View {
     @State private var timerRunning = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let notificationManager = NotificationManager.shared
     
     var body: some View {
         VStack(spacing: 20) {
@@ -63,9 +64,16 @@ struct TimerView: View {
                 timeRemaining = selectedMinutes * 60
             }
         }
+        .onAppear {
+            notificationManager.requestAuthorization()
+        }
         .onReceive(timer) { _ in
             if self.timerRunning && self.timeRemaining > 0 {
                 self.timeRemaining -= 1
+                if self.timeRemaining == 0 {
+                    self.timerRunning = false
+                    notificationManager.scheduleNotification(timeInterval: 1, title: "Meal Ready", body: "Meal is ready! Enjoy your meal!")
+                }
             }
         }
     }
@@ -77,6 +85,7 @@ struct TimerView: View {
     }
     
     func startTimer() {
+        self.timeRemaining = selectedMinutes * 60
         self.timerRunning = true
     }
     
@@ -93,3 +102,4 @@ struct TimerView: View {
 #Preview {
     TimerView()
 }
+

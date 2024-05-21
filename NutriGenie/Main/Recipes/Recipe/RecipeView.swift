@@ -16,10 +16,7 @@ struct RecipeView: View {
                 Text(recipe.name)
                     .font(.title3)
                     .foregroundColor(.black)
-                Text(recipe.ingredients.joined(separator: ", "))
-                    .font(.body)
-                    .foregroundColor(.black)
-                    .padding(.top, 5)
+                
             }
             Spacer()
             if let imageURL = recipe.imageURL, let url = URL(string: imageURL) {

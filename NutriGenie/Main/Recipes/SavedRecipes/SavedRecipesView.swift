@@ -7,24 +7,34 @@
 
 import SwiftUI
 
+
 struct SavedRecipesView: View {
     @EnvironmentObject var viewModel: RecipeViewModel
     
     var body: some View {
-        List(viewModel.savedRecipes) { recipe in
-            VStack(alignment: .leading) {
-                Text(recipe.name)
-                    .font(.headline)
-                Text(recipe.ingredients.joined(separator: ", "))
-                    .font(.subheadline)
-                Text(recipe.instructions)
-                    .font(.body)
+        NavigationView {
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(alignment: .leading, spacing: 8) {
+                    Text("\(viewModel.savedRecipes.count) Saved Recipes ✨")
+                        .font(.title2)
+                        .foregroundColor(.black)
+                        .bold()
+                        .padding(.vertical)
+                        .padding([.leading, .trailing], 18)
+                    
+                    ForEach(viewModel.savedRecipes, id: \.id) { recipe in
+                        NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                            RecipeView(recipe: recipe)
+                        }
+                    }
+                }
             }
-            .padding()
+           // .navigationBarTitle("Saved Recipes")
         }
-        .navigationTitle("Saved Recipes")
     }
 }
+
+
 
 #Preview {
     SavedRecipesView()

@@ -28,6 +28,14 @@ struct SavedRecipesView: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading:
+                                    Text("Saved Recipes")
+                .font(.system(size: 26))
+                .foregroundColor(.black)
+                .bold()
+            )
+            
         }
         .onAppear {
             viewModel.loadSavedRecipes()

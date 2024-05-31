@@ -15,6 +15,7 @@ struct Recipe: Codable, Identifiable {
     var category: String
     var cookingTime: Int
     var imageURL: String?
+    var videoURL: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -24,5 +25,7 @@ struct Recipe: Codable, Identifiable {
         case category
         case cookingTime
         case imageURL = "image_url"
+        case videoURL = "video_url"
     }
 }
+

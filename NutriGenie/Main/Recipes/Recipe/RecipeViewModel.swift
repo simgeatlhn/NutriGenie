@@ -17,7 +17,7 @@ class RecipeViewModel: ObservableObject {
     }
     
     func fetchRecipes() {
-        guard let url = URL(string: "http://192.168.0.126:3000/recipes") else { return }
+        guard let url = URL(string: "http://172.20.10.5:3000/recipes") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
@@ -40,6 +40,7 @@ class RecipeViewModel: ObservableObject {
         }
         .resume()
     }
+    
     
     func applyFilter(category: String) {
         if category == "All" {

@@ -20,7 +20,7 @@ struct RecipeDetailView: View {
                             image.resizable()
                                 .aspectRatio(contentMode: .fill)
                         } else if phase.error != nil {
-                            Image("placeholder") 
+                            Image("placeholder")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(height: 480)
@@ -110,7 +110,9 @@ struct RecipeDetailView: View {
         .navigationTitle("")
         
         Button(action: {
-            // Watch video action
+            if let videoURL = recipe.videoURL, let url = URL(string: videoURL) {
+                UIApplication.shared.open(url)
+            }
         }) {
             Text("Watch Video")
                 .font(.headline)

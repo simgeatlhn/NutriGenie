@@ -26,13 +26,7 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "bookmark")
                     Text("Saved")
-                }
-            
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person")
-                    Text("Profile")
-                }
+                }            
         }
         .accentColor(.black)
     }

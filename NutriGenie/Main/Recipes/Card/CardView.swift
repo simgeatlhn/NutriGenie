@@ -62,10 +62,7 @@ struct CardView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
                 case .failure:
-                    Image(systemName: "photo.on.rectangle.angled")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: geometry.size.width - 16, height: geometry.size.height - 16)
+                    ProgressView()
                 @unknown default:
                     EmptyView()
                 }
@@ -141,4 +138,3 @@ struct CardView: View {
 #Preview {
     CardView()
 }
-

@@ -71,7 +71,7 @@ struct RecipeDetailView: View {
                                 .padding()
                                 .background(Color.gray.opacity(0.1))
                                 .cornerRadius(6)
-                            Text("Favorite")
+                            Text("Favorite 15")
                                 .foregroundColor(.black)
                                 .font(.footnote)
                         }

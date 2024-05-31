@@ -16,26 +16,9 @@ class RecipeViewModel: ObservableObject {
     init() {
         loadSavedRecipes()
     }
-    
-    func applySearchFilter(searchText: String, category: String) {
-        filteredRecipes = recipes.filter { recipe in
-            let isMatchingCategory = category == "All" || recipe.category.contains(category)
-            let isMatchingSearchText = searchText.isEmpty || recipe.name.localizedCaseInsensitiveContains(searchText)
-            return isMatchingCategory && isMatchingSearchText
-        }
-        if filteredRecipes.isEmpty && !searchText.isEmpty {
-            filteredRecipes = recipes.filter { recipe in
-                return category == "All" || recipe.category.contains(category)
-            }
-        }
-    }
-    
-    func onSearchTextChange(selection: Int, tabs: [String]) {
-        applySearchFilter(searchText: searchText, category: tabs[selection])
-    }
-    
+
     func fetchRecipes() {
-        guard let url = URL(string: "http://172.20.10.5:3000/recipes") else { return }
+        guard let url = URL(string: "http:/192.168.1.197:3000/recipes") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
@@ -84,5 +67,23 @@ class RecipeViewModel: ObservableObject {
         UserDefaultsManager.shared.saveRecipe(recipe)
         loadSavedRecipes()
     }
+    
+    func applySearchFilter(searchText: String, category: String) {
+        filteredRecipes = recipes.filter { recipe in
+            let isMatchingCategory = category == "All" || recipe.category.contains(category)
+            let isMatchingSearchText = searchText.isEmpty || recipe.name.localizedCaseInsensitiveContains(searchText)
+            return isMatchingCategory && isMatchingSearchText
+        }
+        if filteredRecipes.isEmpty && !searchText.isEmpty {
+            filteredRecipes = recipes.filter { recipe in
+                return category == "All" || recipe.category.contains(category)
+            }
+        }
+    }
+    
+    func onSearchTextChange(selection: Int, tabs: [String]) {
+        applySearchFilter(searchText: searchText, category: tabs[selection])
+    }
+    
 }
 

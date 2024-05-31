@@ -125,6 +125,14 @@ struct RecipeDetailView: View {
                     Text(recipe.ingredients.joined(separator: ", "))
                         .font(.footnote)
                         .padding(.horizontal)
+                    
+                    Text("Instructions")
+                        .font(.headline)
+                        .padding(.horizontal)
+                        .padding(.top)
+                    Text(recipe.instructions)
+                        .font(.footnote)
+                        .padding(.horizontal)
                 }
                 .padding(.horizontal)
             }

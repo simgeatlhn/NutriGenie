@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var selection = 0
     @State private var searchText = ""
-    var tabs = ["Sweet", "Breakfast", "Lunch", "Dinner"]
+    var tabs = ["Lunch", "Dinner", "Sweet", "Breakfast"]
     @StateObject var viewModel = RecipeViewModel()
     
     var body: some View {

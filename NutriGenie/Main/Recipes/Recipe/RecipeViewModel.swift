@@ -11,9 +11,27 @@ class RecipeViewModel: ObservableObject {
     @Published var recipes = [Recipe]()
     @Published var filteredRecipes = [Recipe]()
     @Published var savedRecipes = [Recipe]()
+    @Published var searchText = ""
     
     init() {
         loadSavedRecipes()
+    }
+    
+    func applySearchFilter(searchText: String, category: String) {
+        filteredRecipes = recipes.filter { recipe in
+            let isMatchingCategory = category == "All" || recipe.category.contains(category)
+            let isMatchingSearchText = searchText.isEmpty || recipe.name.localizedCaseInsensitiveContains(searchText)
+            return isMatchingCategory && isMatchingSearchText
+        }
+        if filteredRecipes.isEmpty && !searchText.isEmpty {
+            filteredRecipes = recipes.filter { recipe in
+                return category == "All" || recipe.category.contains(category)
+            }
+        }
+    }
+    
+    func onSearchTextChange(selection: Int, tabs: [String]) {
+        applySearchFilter(searchText: searchText, category: tabs[selection])
     }
     
     func fetchRecipes() {

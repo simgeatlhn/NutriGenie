@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var selection = 0
+    @State private var searchText = ""
     var tabs = ["Sweet", "Breakfast", "Lunch", "Dinner"]
     @StateObject var viewModel = RecipeViewModel()
     
@@ -37,7 +38,6 @@ struct HomeView: View {
                             }
                     } else {
                         CardView(viewModel: viewModel)
-                        
                     }
                 }
                 .padding(.top)
@@ -78,8 +78,12 @@ struct HomeView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
-                    Text("Explore the recipes")
+                    TextField("Explore the recipes", text: $viewModel.searchText)
                         .foregroundColor(.gray)
+                        .onReceive(viewModel.$searchText) { searchText in
+                            viewModel.onSearchTextChange(selection: selection, tabs: tabs)
+                        }
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 16)

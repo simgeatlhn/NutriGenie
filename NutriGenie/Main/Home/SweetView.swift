@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct SweetView: View {
+    @StateObject var viewModel = RecipeViewModel()
+    
     var body: some View {
-        CardView()
+        CardView(viewModel: viewModel)
     }
 }
 

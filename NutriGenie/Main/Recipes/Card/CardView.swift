@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CardView: View {
-    @StateObject var viewModel = RecipeViewModel()
+    @StateObject var viewModel: RecipeViewModel
     @State private var flipped = false
     
     var body: some View {
@@ -136,5 +136,5 @@ struct CardView: View {
 }
 
 #Preview {
-    CardView()
+    CardView(viewModel: RecipeViewModel())
 }

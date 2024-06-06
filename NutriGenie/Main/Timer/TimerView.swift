@@ -17,7 +17,8 @@ struct TimerView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            //Spacer()
+            LottieView(filename: "Lottie")
+                .frame(width:400, height: 240)
             
             Text(timeString(time: timeRemaining))
                 .font(.system(size: 48, weight: .bold))
